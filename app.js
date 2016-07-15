@@ -30,7 +30,7 @@ connection.connect(function(err) {
 //hello
 // render index page
 app.get('/api/getAllTickets', function(req, resp){
-	connection.query('SELECT * from TicketingData', function(err, rows, fields) {
+	connection.query('SELECT * from Ticketingdata', function(err, rows, fields) {
   		if (err) throw err;
   		var json = JSON.stringify(rows);
   		resp.send(json);
@@ -46,7 +46,7 @@ app.post('/api/addTicket', function(req, resp){
 		try{
 			jsp = JSON.parse(data);
 			 var Ticket = { Customer_EailId:jsp.Customer_EailId,OrderId:jsp.OrderId ,Tag:jsp.Tag,Description:jsp.Description,status:jsp.status,customer_MobileNumber:jsp.customer_MobileNumber,Employee_username:jsp.Employee_username };
-			 connection.query('INSERT INTO TicketingData SET ?', Ticket, function(err,ticket){
+			 connection.query('INSERT INTO Ticketingdata SET ?', Ticket, function(err,ticket){
   			if(err) throw err;
   			console.log('Last insert ID:', ticket.insertId);
   			 var comment = {Employee_username:jsp.Employee_username,Ticket_id:ticket.insertId,Comment:jsp.Description};
