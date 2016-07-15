@@ -36,7 +36,7 @@ app.get('/api/getAllTickets', function(req, resp){
   		resp.send(json);
 	});
 });
-app.post('/api/POST', function(req, resp){
+app.post('/api/addTicket', function(req, resp){
 	var data = "";
 	req.on('data', function(datachunc){
 		data += datachunc;
@@ -45,11 +45,16 @@ app.post('/api/POST', function(req, resp){
 	req.on('end', function(){
 		try{
 			jsp = JSON.parse(data);
-			 var Ticket = { Customer_EailId:jsp.Customer_EailId,OrderId:jsp.OrderId ,Tag:jsp.Tag,Description:jsp.Description,status:jsp.status };
-			 connection.query('INSERT INTO TicketingData SET ?', Ticket, function(err,res){
+			 var Ticket = { Customer_EailId:jsp.Customer_EailId,OrderId:jsp.OrderId ,Tag:jsp.Tag,Description:jsp.Description,status:jsp.status,customer_MobileNumber:jsp.customer_MobileNumber,Employee_username:jsp.Employee_username };
+			 connection.query('INSERT INTO TicketingData SET ?', Ticket, function(err,ticket){
   			if(err) throw err;
-  			console.log('Last insert ID:', res.insertId);
-  			resp.send({"TicketId":res.insertId});
+  			console.log('Last insert ID:', ticket.insertId);
+  			 var comment = {Employee_username:jsp.Employee_username,Ticket_id:ticket.insertId,Comment:jsp.Description};
+  			 console.log(comment);
+			 connection.query('INSERT INTO Comments SET ?', comment, function(err,res){
+  			if(err) throw err;
+  			resp.send({"Ticket":ticket.insertId});
+  			});
   			});
 		}
 		catch(e){
@@ -59,7 +64,7 @@ app.post('/api/POST', function(req, resp){
 
 	});
 });
-app.post('/api/AddComment', function(req, resp){
+app.post('/api/addComment', function(req, resp){
 	var data = "";
 	req.on('data', function(datachunc){
 		data += datachunc;
