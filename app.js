@@ -36,7 +36,7 @@ app.get('/api/getAllTickets', function(req, resp){
   		resp.send(json);
 	});
 });
-app.post('/api/POST', function(req, res){
+app.post('/api/POST', function(req, resp){
 	var data = "";
 	req.on('data', function(datachunc){
 		data += datachunc;
@@ -48,11 +48,12 @@ app.post('/api/POST', function(req, res){
 			 var Ticket = { Customer_EailId:jsp.Customer_EailId,OrderId:jsp.OrderId ,Tag:jsp.Tag,Description:jsp.Description };
 			 connection.query('INSERT INTO TicketingData SET ?', Ticket, function(err,res){
   			if(err) throw err;
-  			console.log('Last insert ID:', res);
+  			console.log('Last insert ID:', res.insertId);
+  			resp.end(res.insertId.toString());
   			});
 		}
 		catch(e){
-			res.end("invalidJson");
+			resp.end("invalidJson");
 			return;
 		}
 
