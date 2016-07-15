@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : 'root123',
-  database : 'TicketingData'
+  database : 'ticketingdata'
 });
 connection.connect(function(err) {
   if (err) {
