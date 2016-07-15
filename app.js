@@ -59,6 +59,36 @@ app.post('/api/POST', function(req, resp){
 
 	});
 });
+app.post('/api/AddComment', function(req, resp){
+	var data = "";
+	req.on('data', function(datachunc){
+		data += datachunc;
+	});
+	var jsp = "";
+	req.on('end', function(){
+		try{
+			jsp = JSON.parse(data);
+			 var comment = {Employee_username:jsp.Employee_username,Ticket_id:jsp.Ticket_id,Comment:jsp.Comment};
+			 connection.query('INSERT INTO Comments SET ?', comment, function(err,res){
+  			if(err) throw err;
+  			console.log('Last insert ID:', res.insertId);
+  			resp.send({"CommentId":res.insertId});
+  			});
+		}
+		catch(e){
+			resp.end("invalidJson");
+			return;
+		}
+
+	});
+});
+app.get('/api/getCommentsForKey/:id', function(req, resp){
+	connection.query('SELECT * from Comments where Ticket_id = ?',req.params.id, function(err, rows, fields) {
+  		if (err) throw err;
+  		var json = JSON.stringify(rows);
+  		resp.send(json);
+	});
+});
 var appInfo = JSON.parse(process.env.VCAP_APPLICATION || "{}");
 var services = JSON.parse(process.env.VCAP_SERVICES || "{}");
 var host = 'localhost';
