@@ -49,7 +49,7 @@ app.post('/api/POST', function(req, resp){
 			 connection.query('INSERT INTO TicketingData SET ?', Ticket, function(err,res){
   			if(err) throw err;
   			console.log('Last insert ID:', res.insertId);
-  			resp.end(res.insertId.toString());
+  			resp.send({"TicketId":res.insertId});
   			});
 		}
 		catch(e){
