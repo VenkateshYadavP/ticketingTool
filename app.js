@@ -45,7 +45,7 @@ app.post('/api/POST', function(req, resp){
 	req.on('end', function(){
 		try{
 			jsp = JSON.parse(data);
-			 var Ticket = { Customer_EailId:jsp.Customer_EailId,OrderId:jsp.OrderId ,Tag:jsp.Tag,Description:jsp.Description };
+			 var Ticket = { Customer_EailId:jsp.Customer_EailId,OrderId:jsp.OrderId ,Tag:jsp.Tag,Description:jsp.Description,status:jsp.status };
 			 connection.query('INSERT INTO TicketingData SET ?', Ticket, function(err,res){
   			if(err) throw err;
   			console.log('Last insert ID:', res.insertId);
